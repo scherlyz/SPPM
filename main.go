@@ -1,20 +1,27 @@
 package main
 
 import (
-    "log"
+    "sppm/config"
+    "sppm/database"
+	"log"
+	
 
-    "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
-    app := fiber.New()
+	config.LoadEnv()
+    database.ConnectPostgres()
+    database.ConnectMongo()
 
-    // Route test
-    app.Get("/", func(c *fiber.Ctx) error {
-        return c.JSON(fiber.Map{
-            "message": "SPPM API running...",
-        })
-    })
+	app := fiber.New()
 
-    log.Fatal(app.Listen(":8081"))
+	// Route test
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{
+			"message": "SPPM API running...",
+		})
+	})
+
+	log.Fatal(app.Listen(":8081"))
 }
